@@ -1,0 +1,42 @@
+@echo off
+
+SET /P EXPACK=Do you want to extract .pack file (Y/[N])?
+IF /I "%EXPACK%" NEQ "Y" GOTO LOOP
+
+:Extract
+	cd C:\Users\USER\Desktop\ZTPR
+	sarc extract C:\Users\USER\Desktop\ZTPR\Bootup_EUen.pack
+	echo .
+	echo Pack Extracted
+	echo .
+	SET /P CONTINUE=Move to Editing (Y/[N])?
+	IF /I "%CONTINUE%" NEQ "Y" GOTO END
+
+
+:LOOP
+	cd C:\Users\USER\Desktop\ZTPR
+	sarc extract Bootup_EUen\Message\Msg_EUen.product.ssarc
+
+	explorer.exe "C:\Users\USER\Desktop\ZTPR\Bootup_EUen\Message\Msg_EUen.product\DemoMsg"
+	echo .
+	echo Edit Files. Press button to repack.
+	pause
+
+	sarc update Bootup_EUen\Message\Msg_EUen.product Bootup_EUen\Message\Msg_EUen.product.ssarc
+	RD /Q /S Bootup_EUen\Message\Msg_EUen.product
+	sarc update Bootup_EUen "C:\Games\cemu_1.15.2\graphicPacks\Zelda Translation Project\content\Pack\Bootup_EUen.pack"
+
+	SET /P RUNGAME=Run Game (Y/[N])?
+	IF /I "%RUNGAME%" NEQ "Y" GOTO CONTINUES
+
+
+	cd C:\Games\cemu_1.15.2\
+	Cemu.exe -g "C:\Games\Cemu Games\The Legend of Zelda Breath of the Wild [ALZP0101]\code\U-King.rpx"
+	echo Running Game
+
+
+:CONTINUES
+SET /P CONTINUE=Continue editing Editing (Y/[N])?
+IF /I "%CONTINUE%" EQU "Y" GOTO LOOP
+
+:END
